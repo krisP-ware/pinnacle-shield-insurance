@@ -1,10 +1,6 @@
-/* =========================================
-   Pinnacle Shield Insurance – Quote Logic
-   ========================================= */
+/* Pinnacle Shield Insurance – Quote Logic */
 
 /* ----- Calculation Tables ----- */
-
-// Coverage level multipliers — shared across all three types
 const COVERAGE_MULTIPLIERS = {
     basic:    0.8,
     standard: 1.0,
@@ -12,15 +8,12 @@ const COVERAGE_MULTIPLIERS = {
 };
 
 /* ── Auto factors ── */
-
-// Age factor: Under 25 ×1.5 / 25–65 ×1.0 / Over 65 ×1.3
 function getAutoAgeFactor(age) {
     if (age < 25) return 1.5;
     if (age <= 65) return 1.0;
     return 1.3;
 }
 
-// Vehicle age factor based on the year the vehicle was manufactured
 function getVehicleAgeFactor(vehicleYear) {
     const vehicleAge = 2026 - parseInt(vehicleYear, 10);
     if (vehicleAge < 3)  return 1.3;   // nearly new
@@ -51,7 +44,6 @@ const CONSTRUCTION_FACTORS = {
     steel:    0.85
 };
 
-// Year built factor: Before 1970 ×1.4 / 1970–1999 ×1.1 / 2000+ ×1.0
 function getYearBuiltFactor(year) {
     if (year < 1970) return 1.4;
     if (year < 2000) return 1.1;
@@ -59,8 +51,6 @@ function getYearBuiltFactor(year) {
 }
 
 /* ── Life factors ── */
-
-// Age factor: 18–30 ×1.0 / 31–45 ×1.5 / 46–60 ×2.5 / 61–85 ×4.0
 function getLifeAgeFactor(age) {
     if (age <= 30) return 1.0;
     if (age <= 45) return 1.5;
@@ -94,8 +84,6 @@ const COVERAGE_LABELS = {
 };
 
 /* ── Calculation functions ── */
-
-// Auto: $75 × ageFactor × vehicleAgeFactor × mileageFactor × drivingRecordFactor × coverageFactor
 function calculateAutoQuote(age, vehicleYear, mileage, record, coverage) {
     return Math.round(
         75 *
@@ -107,9 +95,6 @@ function calculateAutoQuote(age, vehicleYear, mileage, record, coverage) {
     );
 }
 
-// Home: (homeValue × 0.003 / 12) × yearBuiltFactor × constructionFactor × coverageFactor
-//       + (sqft × $0.01)   — size is additive
-//       then apply security (×0.95) and sprinkler (×0.92) discounts
 function calculateHomeQuote(homeValue, yearBuilt, sqft, constructionType, hasSecurity, hasSprinklers, coverage) {
     let price = (parseFloat(homeValue) * 0.003 / 12) *
         getYearBuiltFactor(parseInt(yearBuilt, 10)) *
@@ -124,8 +109,6 @@ function calculateHomeQuote(homeValue, yearBuilt, sqft, constructionType, hasSec
     return Math.round(price);
 }
 
-// Life: (coverageAmount × 0.0005 / 12) × ageFactor × smokerFactor
-//       × exerciseFactor × preexistingFactor × genderFactor × coverageFactor
 const COVERAGE_AMOUNT_VALUES = {
     '100k': 100000,
     '250k': 250000,
@@ -146,10 +129,7 @@ function calculateLifeQuote(age, gender, smoker, coverageAmount, exercise, hasPr
     );
 }
 
-/* =========================================
-   Type Card — Show / Hide Field Sections
-   ========================================= */
-
+/* Type Card — Show / Hide Field Sections */
 const FIELD_SECTIONS = {
     auto: 'autoFields',
     home: 'homeFields',
@@ -171,10 +151,7 @@ document.querySelectorAll('input[name="insuranceType"]').forEach(function (radio
     });
 });
 
-/* =========================================
-   Validation Helpers
-   ========================================= */
-
+/* Validation Helpers */
 function validateField(id, isValid) {
     const el = document.getElementById(id);
     if (isValid) {
@@ -342,11 +319,7 @@ function validateLifeFields() {
     return ok;
 }
 
-/* =========================================
-   Display Helpers
-   ========================================= */
-
-// Format a number as USD currency, e.g. 142.5 → "$142.50"
+/* Display Helpers */
 function formatCurrency(amount) {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -355,8 +328,6 @@ function formatCurrency(amount) {
     }).format(amount);
 }
 
-// Convert a multiplier to a readable impact string
-// e.g. 1.5 → "+50% surcharge (×1.5)"  |  0.95 → "−5% discount (×0.95)"  |  1.0 → "No effect (×1.0)"
 function multiplierImpact(factor, description) {
     const pct = Math.round(Math.abs((factor - 1) * 100));
     if (factor === 1.0) return 'No effect (×1.0)';
@@ -364,7 +335,6 @@ function multiplierImpact(factor, description) {
     return `${dir} (×${factor})${description ? ' — ' + description : ''}`;
 }
 
-// Add a row to a breakdown <tbody> — exactly per spec
 function addBreakdownRow(tbody, factor, userValue, impact) {
     const row = document.createElement('tr');
     row.innerHTML =
@@ -375,7 +345,6 @@ function addBreakdownRow(tbody, factor, userValue, impact) {
 }
 
 /* ── Per-type breakdown builders ── */
-
 const MILEAGE_LABELS = {
     under5k:   'Under 5,000 miles',
     '5to10k':  '5,000–10,000 miles',
@@ -463,9 +432,7 @@ function buildLifeBreakdown(tbody, age, gender, smoker, coverageAmount, exercise
     addBreakdownRow(tbody, 'Coverage Level',         COVERAGE_LABELS[coverage],                            multiplierImpact(covF, ''));
 }
 
-/* =========================================
-   Show Results Card
-   ========================================= */
+/* Show Results Card */
 
 function showResults(name, email, type, monthlyPrice, buildBreakdownFn) {
     const annual = monthlyPrice * 12;
@@ -486,32 +453,14 @@ function showResults(name, email, type, monthlyPrice, buildBreakdownFn) {
     const resultsCard  = document.getElementById('quoteResults');
     resultsCard.classList.remove('d-none');
 
-    // Smooth scroll to results
+    // Smooth scroll to results — reuses smoothScrollTo() defined in main.js
     const navbar       = document.querySelector('.navbar');
     const navbarHeight = navbar ? navbar.offsetHeight : 0;
     const targetTop    = resultsCard.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 16;
-
-    const SCROLL_DURATION = 800;
-    const startY   = window.pageYOffset;
-    const distance = targetTop - startY;
-    let startTime  = null;
-
-    function ease(t) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
-
-    function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        const elapsed  = timestamp - startTime;
-        const progress = Math.min(elapsed / SCROLL_DURATION, 1);
-        window.scrollTo(0, startY + distance * ease(progress));
-        if (elapsed < SCROLL_DURATION) requestAnimationFrame(step);
-    }
-
-    requestAnimationFrame(step);
+    smoothScrollTo(targetTop);
 }
 
-/* =========================================
-   Form Submit Handler
-   ========================================= */
+/* Form Submit Handler */
 
 document.getElementById('quoteForm').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -579,9 +528,7 @@ document.getElementById('quoteForm').addEventListener('submit', function (e) {
     }
 });
 
-/* =========================================
-   Reset / Start Over
-   ========================================= */
+/* Reset / Start Over */
 
 document.getElementById('resetQuote').addEventListener('click', function () {
     const form = document.getElementById('quoteForm');
@@ -607,5 +554,5 @@ document.getElementById('resetQuote').addEventListener('click', function () {
     const navbar       = document.querySelector('.navbar');
     const navbarHeight = navbar ? navbar.offsetHeight : 0;
     const targetTop    = formCard.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 16;
-    window.scrollTo({ top: targetTop, behavior: 'smooth' });
+    smoothScrollTo(targetTop);
 });

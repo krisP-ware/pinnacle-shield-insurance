@@ -43,6 +43,7 @@ document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
         }
     });
 });
+// end smooth scroll functions
 
 /* ----- Active Nav Highlighting ----- */
 (function () {

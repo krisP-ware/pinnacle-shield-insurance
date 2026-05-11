@@ -1,6 +1,4 @@
-/* =========================================
-   Pinnacle Shield Insurance – Custom Styles
-   ========================================= */
+/* Pinnacle Shield Insurance – Custom Styles */
 
 /* ----- CSS Reset ----- */
 *, *::before, *::after {
@@ -97,8 +95,6 @@ body {
 }
 
 /* ----- Insurance Type Card Picker (Quote Page) ----- */
-/* The actual radio input is visually hidden by Bootstrap's btn-check class.
-   We style the <label> to look like a card instead. */
 .type-card {
     display: flex;
     flex-direction: column;
