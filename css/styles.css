@@ -9,7 +9,6 @@
     padding: 0;
 }
 
-/* Native smooth scrolling fallback */
 html {
     scroll-behavior: smooth;
 }
@@ -98,9 +97,8 @@ body {
 }
 
 /* ----- Footer ----- */
-/* Matches the navbar: dark background, light text, amber accent border */
 footer {
-    background-color: #212529; /* same dark shade as bg-dark navbar */
+    background-color: #212529;
     color: #f8f9fa;
     border-top: 3px solid #ffc107;
     padding: 2rem 0;
@@ -128,7 +126,6 @@ footer h5 {
    ========================================= */
 @media (max-width: 767.98px) {
 
-    /* Reduce hero padding and font sizes on small screens */
     .hero-section {
         min-height: auto;
         padding: 60px 16px;
@@ -142,18 +139,15 @@ footer h5 {
         font-size: 1rem;
     }
 
-    /* Stack footer columns and center all text */
     footer .row > div {
         text-align: center !important;
     }
 
-    /* Add breathing room between insurance/benefit cards */
     .insurance-card,
     .card {
         margin-bottom: 1.25rem;
     }
 
-    /* Slightly smaller section headings */
     section h2 {
         font-size: 1.6rem;
     }

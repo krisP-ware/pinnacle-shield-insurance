@@ -1,10 +1,6 @@
-/* =========================================
-   Pinnacle Shield Insurance – Main JS
-   ========================================= */
+/* Pinnacle Shield Insurance – Main JS */
 
 /* ----- Smooth Scroll ----- */
-/* Custom easing scroll — gives full control over scroll duration.
-   Increase SCROLL_DURATION (milliseconds) to slow it down further. */
 var SCROLL_DURATION = 900; // ms — tweak this value to taste
 
 function easingFn(t) {
@@ -29,7 +25,6 @@ function smoothScrollTo(targetY) {
             requestAnimationFrame(step);
         }
     }
-
     requestAnimationFrame(step);
 }
 
@@ -48,9 +43,6 @@ document.querySelectorAll('a[href^="#"]').forEach(function (anchor) {
 });
 
 /* ----- Active Nav Highlighting ----- */
-/* Compare every nav link's filename to the current page's filename.
-   Add the Bootstrap "active" class to the one that matches,
-   and remove it from all others — so the correct page is always highlighted. */
 (function () {
     // Get just the filename part of the current URL (e.g. "index.html" or "about.html").
     // If the path ends in "/" we default to "index.html".
