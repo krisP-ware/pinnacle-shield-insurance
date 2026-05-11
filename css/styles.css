@@ -96,6 +96,102 @@ body {
     line-height: 1;
 }
 
+/* ----- Insurance Type Card Picker (Quote Page) ----- */
+/* The actual radio input is visually hidden by Bootstrap's btn-check class.
+   We style the <label> to look like a card instead. */
+.type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 18px 10px;
+    border: 2px solid #dee2e6;
+    border-radius: 12px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+    user-select: none;
+}
+
+.type-card:hover {
+    border-color: #4a7c59;
+    box-shadow: 0 4px 14px rgba(74, 124, 89, 0.15);
+}
+
+/* When the hidden radio is checked, highlight the label card */
+.btn-check:checked + .type-card {
+    border-color: #2d5a3d;
+    background: #f0f7f2;
+    box-shadow: 0 4px 14px rgba(45, 90, 61, 0.2);
+}
+
+.type-card-icon {
+    font-size: 2.4rem;
+    line-height: 1;
+}
+
+.type-card-label {
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: #333;
+}
+
+/* ----- Coverage Level Radio Buttons (Quote Page) ----- */
+.coverage-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    border: 2px solid #dee2e6;
+    border-radius: 10px;
+    background: #fff;
+    cursor: pointer;
+    transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+    min-width: 110px;
+    text-align: center;
+}
+
+.coverage-btn:hover {
+    border-color: #4a7c59;
+    box-shadow: 0 3px 10px rgba(74, 124, 89, 0.15);
+}
+
+.btn-check:checked + .coverage-btn {
+    border-color: #2d5a3d;
+    background: #f0f7f2;
+    box-shadow: 0 3px 10px rgba(45, 90, 61, 0.2);
+}
+
+.coverage-btn-title {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #212529;
+}
+
+.coverage-btn-sub {
+    font-size: 0.75rem;
+    color: #6c757d;
+    margin-top: 2px;
+}
+
+/* ----- Quote Page Banner ----- */
+.quote-banner {
+    background: linear-gradient(135deg, #4a7c59 0%, #2d5a3d 100%);
+    padding: 60px 20px;
+}
+
+/* ----- Quote Results Stats ----- */
+.result-stat {
+    border: 1px solid #dee2e6;
+    transition: box-shadow 0.2s ease;
+}
+
+.result-stat:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
 /* ----- Footer ----- */
 footer {
     background-color: #212529;
