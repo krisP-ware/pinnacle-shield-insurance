@@ -129,6 +129,21 @@ function calculateLifeQuote(age, gender, smoker, coverageAmount, exercise, hasPr
     );
 }
 
+/* Name Fields — Strip digits on input */
+['autoFullName', 'homeFullName', 'lifeFullName'].forEach(function (id) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.addEventListener('input', function () {
+        const pos = this.selectionStart;
+        const cleaned = this.value.replace(/[0-9]/g, '');
+        if (cleaned !== this.value) {
+            this.value = cleaned;
+            // Restore cursor position accounting for removed characters
+            this.setSelectionRange(pos - 1, pos - 1);
+        }
+    });
+});
+
 /* Type Card — Show / Hide Field Sections */
 const FIELD_SECTIONS = {
     auto: 'autoFields',
@@ -138,14 +153,20 @@ const FIELD_SECTIONS = {
 
 document.querySelectorAll('input[name="insuranceType"]').forEach(function (radio) {
     radio.addEventListener('change', function () {
+        // Hide all type-specific sections
         Object.keys(FIELD_SECTIONS).forEach(function (key) {
             document.getElementById(FIELD_SECTIONS[key]).classList.add('d-none');
         });
 
+        // Show the selected type's section
         const sectionId = FIELD_SECTIONS[this.value];
         if (sectionId) {
             document.getElementById(sectionId).classList.remove('d-none');
         }
+
+        // Show common fields (email, notes, submit) now that a type is chosen
+        document.getElementById('commonFields').classList.remove('d-none');
+        document.getElementById('commonFieldsBottom').classList.remove('d-none');
 
         document.querySelector('.type-card-invalid').classList.add('d-none');
     });
@@ -541,6 +562,9 @@ document.getElementById('resetQuote').addEventListener('click', function () {
     document.querySelectorAll('.type-fields').forEach(function (section) {
         section.classList.add('d-none');
     });
+
+    document.getElementById('commonFields').classList.add('d-none');
+    document.getElementById('commonFieldsBottom').classList.add('d-none');
 
     document.querySelector('.type-card-invalid').classList.add('d-none');
     document.querySelector('.auto-coverage-invalid').classList.add('d-none');

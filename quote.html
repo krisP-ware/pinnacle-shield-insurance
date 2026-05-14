@@ -119,15 +119,23 @@
                                         </div>
                                     </div>
 
-                                    <!-- Common: Email (always visible) -->
-                                    <div class="mb-4">
-                                        <label for="email" class="form-label fw-semibold">
-                                            Email Address <span class="text-danger">*</span>
-                                        </label>
-                                        <input type="email" class="form-control" id="email"
-                                               placeholder="jane@example.com">
-                                        <div class="invalid-feedback">Please enter a valid email address.</div>
+                                    <!-- Common fields — revealed when any type card is selected -->
+                                    <div id="commonFields" class="d-none">
+
+                                        <hr class="mb-4">
+
+                                        <!-- Email -->
+                                        <div class="mb-4">
+                                            <label for="email" class="form-label fw-semibold">
+                                                Email Address <span class="text-danger">*</span>
+                                            </label>
+                                            <input type="email" class="form-control" id="email"
+                                                   placeholder="jane@example.com">
+                                            <div class="invalid-feedback">Please enter a valid email address.</div>
+                                        </div>
+
                                     </div>
+                                    <!-- END Common Fields (top) -->
 
                                     <!-- ===== Auto Insurance Fields ===== -->
                                     <div id="autoFields" class="type-fields d-none">
@@ -142,7 +150,7 @@
                                                 </label>
                                                 <input type="text" class="form-control" id="autoFullName"
                                                        placeholder="Jane Smith" minlength="2">
-                                                <div class="invalid-feedback">Please enter your full name (min 2 characters).</div>
+                                                <div class="invalid-feedback">Please enter your full name (letters only, min 2 characters).</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="autoAge" class="form-label fw-semibold">
@@ -279,7 +287,7 @@
                                                 </label>
                                                 <input type="text" class="form-control" id="homeFullName"
                                                        placeholder="Jane Smith" minlength="2">
-                                                <div class="invalid-feedback">Please enter your full name (min 2 characters).</div>
+                                                <div class="invalid-feedback">Please enter your full name (letters only, min 2 characters).</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="homeAge" class="form-label fw-semibold">
@@ -416,7 +424,7 @@
                                                 </label>
                                                 <input type="text" class="form-control" id="lifeFullName"
                                                        placeholder="Jane Smith" minlength="2">
-                                                <div class="invalid-feedback">Please enter your full name (min 2 characters).</div>
+                                                <div class="invalid-feedback">Please enter your full name (letters only, min 2 characters).</div>
                                             </div>
                                             <div class="col-md-6">
                                                 <label for="lifeAge" class="form-label fw-semibold">
@@ -552,19 +560,25 @@
                                     </div>
                                     <!-- END Life Fields -->
 
-                                    <!-- Additional Notes -->
-                                    <div class="mt-4 mb-4">
-                                        <label for="notes" class="form-label fw-semibold">Additional Notes</label>
-                                        <textarea class="form-control" id="notes" rows="3"
-                                                  placeholder="Any specific requirements or questions…"></textarea>
-                                    </div>
+                                    <!-- Common bottom fields — also revealed when a type card is selected -->
+                                    <div id="commonFieldsBottom" class="d-none">
 
-                                    <!-- Submit -->
-                                    <div class="d-grid">
-                                        <button type="submit" class="btn btn-warning btn-lg fw-semibold">
-                                            Calculate My Quote
-                                        </button>
+                                        <!-- Additional Notes -->
+                                        <div class="mt-4 mb-4">
+                                            <label for="notes" class="form-label fw-semibold">Additional Notes</label>
+                                            <textarea class="form-control" id="notes" rows="3"
+                                                      placeholder="Any specific requirements or questions…"></textarea>
+                                        </div>
+
+                                        <!-- Submit -->
+                                        <div class="d-grid">
+                                            <button type="submit" class="btn btn-warning btn-lg fw-semibold">
+                                                Calculate My Quote
+                                            </button>
+                                        </div>
+
                                     </div>
+                                    <!-- END Common Fields (bottom) -->
 
                                 </form>
                             </div>
