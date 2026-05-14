@@ -1,5 +1,18 @@
 /* Pinnacle Shield Insurance – Custom Styles */
 
+/* ----- Global Colour Palette ----- */
+:root {
+    --color-primary:      #2563EB;   /* corporate blue */
+    --color-accent:       #2563EB;   /* same blue — CTAs, highlights */
+    --color-accent-dark:  #1D4ED8;   /* deeper blue — hover/active */
+    --color-bg:           #FFFFFF;   /* pure white */
+    --color-bg-alt:       #F3F4F6;   /* light grey — section backgrounds */
+    --color-selected:     #EFF6FF;   /* very light blue tint — checked/open states */
+    --color-border:       #E5E7EB;   /* light grey — borders */
+    --color-text:         #111827;   /* near-black */
+    --color-text-muted:   #6B7280;   /* medium grey */
+}
+
 /* ----- CSS Reset ----- */
 *, *::before, *::after {
     box-sizing: border-box;
@@ -14,40 +27,151 @@ html {
 /* ----- Global ----- */
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: #333;
+    color: var(--color-text);
     line-height: 1.6;
+    background-color: var(--color-bg);
 }
 
-/* ----- Navbar ----- */
+/* ----- Bootstrap Utility Overrides ----- */
+.bg-dark,
+.navbar.bg-dark {
+    background-color: var(--color-text) !important;
+}
+
+.bg-light {
+    background-color: var(--color-bg-alt) !important;
+}
+
+.bg-success {
+    background-color: var(--color-primary) !important;
+}
+
+/* CTA buttons — white text on blue */
+.btn-warning {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-warning:hover,
+.btn-warning:focus {
+    background-color: var(--color-accent-dark);
+    border-color: var(--color-accent-dark);
+    color: #fff;
+}
+
+.btn-warning:disabled {
+    background-color: var(--color-accent);
+    border-color: var(--color-accent);
+    color: #fff;
+    opacity: 0.6;
+}
+
+/* Secondary action buttons */
+.btn-success {
+    background-color: var(--color-text);
+    border-color: var(--color-text);
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-success:hover,
+.btn-success:focus {
+    background-color: #1f2937;
+    border-color: #1f2937;
+    color: #fff;
+}
+
+.btn-success:disabled {
+    background-color: var(--color-border);
+    border-color: var(--color-border);
+    color: var(--color-text-muted);
+    opacity: 0.75;
+}
+
+.btn-outline-dark {
+    color: var(--color-text);
+    border-color: var(--color-border);
+}
+
+.btn-outline-dark:hover {
+    background-color: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+.btn-outline-secondary {
+    color: var(--color-text-muted);
+    border-color: var(--color-border);
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--color-bg-alt);
+    border-color: var(--color-border);
+    color: var(--color-text);
+}
+
+/* Premium price text */
+.text-success {
+    color: var(--color-accent) !important;
+}
+
+/* ----- Navbar (light, white background) ----- */
+.navbar {
+    background-color: var(--color-bg) !important;
+    border-bottom: 1px solid var(--color-border);
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
 .navbar-brand {
     font-size: 1.25rem;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    color: var(--color-text) !important;
+    font-weight: 700;
 }
 
 .navbar .nav-link {
     font-size: 0.95rem;
+    color: var(--color-text-muted) !important;
     transition: color 0.2s ease;
 }
 
 .navbar .nav-link:hover {
-    color: #ffc107 !important;
+    color: var(--color-accent) !important;
+}
+
+.navbar .nav-link.active {
+    color: var(--color-accent) !important;
+    font-weight: 600;
+}
+
+/* Make the hamburger toggler visible on light navbar */
+.navbar-toggler {
+    border-color: var(--color-border);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%2817,24,39,0.75%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
 /* ----- Hero Section ----- */
 .hero-section {
-    background: linear-gradient(135deg, #4a7c59 0%, #2d5a3d 100%);
+    background: linear-gradient(135deg, #1e3a8a 0%, var(--color-accent) 55%, #60a5fa 100%);
     min-height: 520px;
     padding: 100px 20px;
     text-align: center;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 20px;
+    margin: 1.25rem 1.25rem 1.25rem;
 }
 
 .hero-section h1 {
-    font-size: 3rem;
+    font-size: 4rem;
     font-weight: 700;
-    text-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     margin-bottom: 1rem;
 }
 
@@ -60,6 +184,24 @@ body {
     opacity: 0.92;
 }
 
+/* Hero CTA — white bg button on blue hero */
+.hero-section .btn-warning {
+    background-color: #fff;
+    border-color: #fff;
+    color: var(--color-accent);
+    font-weight: 700;
+}
+
+.hero-section .btn-warning:hover {
+    background-color: var(--color-bg-alt);
+    border-color: var(--color-bg-alt);
+    color: var(--color-accent-dark);
+}
+
+/* ----- Why Choose Us Section ----- */
+#why-choose-us {
+}
+
 /* ----- Why Choose Us Cards ----- */
 .card {
     border-radius: 12px;
@@ -68,7 +210,7 @@ body {
 
 .card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15) !important;
+    box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12) !important;
 }
 
 .benefit-icon {
@@ -78,15 +220,16 @@ body {
 
 /* ----- Insurance Types Section ----- */
 .insurance-card {
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     background: #fff;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .insurance-card:hover {
     transform: translateY(-6px);
-    box-shadow: 0 10px 24px rgba(45, 90, 61, 0.18);
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.16);
+    border-color: var(--color-accent);
 }
 
 .insurance-icon {
@@ -102,7 +245,7 @@ body {
     justify-content: center;
     gap: 8px;
     padding: 18px 10px;
-    border: 2px solid #dee2e6;
+    border: 2px solid var(--color-border);
     border-radius: 12px;
     background: #fff;
     cursor: pointer;
@@ -111,15 +254,14 @@ body {
 }
 
 .type-card:hover {
-    border-color: #4a7c59;
-    box-shadow: 0 4px 14px rgba(74, 124, 89, 0.15);
+    border-color: var(--color-accent);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.15);
 }
 
-/* When the hidden radio is checked, highlight the label card */
 .btn-check:checked + .type-card {
-    border-color: #2d5a3d;
-    background: #f0f7f2;
-    box-shadow: 0 4px 14px rgba(45, 90, 61, 0.2);
+    border-color: var(--color-accent);
+    background: var(--color-selected);
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.18);
 }
 
 .type-card-icon {
@@ -130,7 +272,7 @@ body {
 .type-card-label {
     font-weight: 600;
     font-size: 0.95rem;
-    color: #333;
+    color: var(--color-text);
 }
 
 /* ----- Coverage Level Radio Buttons (Quote Page) ----- */
@@ -140,7 +282,7 @@ body {
     align-items: center;
     justify-content: center;
     padding: 12px 24px;
-    border: 2px solid #dee2e6;
+    border: 2px solid var(--color-border);
     border-radius: 10px;
     background: #fff;
     cursor: pointer;
@@ -150,25 +292,25 @@ body {
 }
 
 .coverage-btn:hover {
-    border-color: #4a7c59;
-    box-shadow: 0 3px 10px rgba(74, 124, 89, 0.15);
+    border-color: var(--color-accent);
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.15);
 }
 
 .btn-check:checked + .coverage-btn {
-    border-color: #2d5a3d;
-    background: #f0f7f2;
-    box-shadow: 0 3px 10px rgba(45, 90, 61, 0.2);
+    border-color: var(--color-accent);
+    background: var(--color-selected);
+    box-shadow: 0 3px 10px rgba(37, 99, 235, 0.18);
 }
 
 .coverage-btn-title {
     font-weight: 700;
     font-size: 0.95rem;
-    color: #212529;
+    color: var(--color-text);
 }
 
 .coverage-btn-sub {
     font-size: 0.75rem;
-    color: #6c757d;
+    color: var(--color-text-muted);
     margin-top: 2px;
 }
 
@@ -185,15 +327,16 @@ body {
     max-width: 240px;
     text-align: center;
     background: #fff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--color-border);
     border-radius: 12px;
     padding: 2rem 1.5rem;
-    transition: transform 0.25s ease, box-shadow 0.25s ease;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
 }
 
 .value-item:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 24px rgba(45, 90, 61, 0.14);
+    box-shadow: 0 10px 24px rgba(37, 99, 235, 0.14);
+    border-color: var(--color-accent);
 }
 
 .value-icon {
@@ -206,38 +349,43 @@ body {
     width: 120px;
     height: 120px;
     object-fit: cover;
-    border: 3px solid #e0e0e0;
+    border: 3px solid var(--color-border);
 }
 
-/* ----- Quote Page Banner ----- */
-.quote-banner {
-    background: linear-gradient(135deg, #4a7c59 0%, #2d5a3d 100%);
-    padding: 60px 20px;
+/* ----- Quote / About / FAQ Page Banner ----- */
+.quote-banner,
+.about-banner,
+.faq-banner {
+    background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-dark) 100%);
+    padding: 80px 20px;
+    border-radius: 20px;
+    margin: 1.25rem 1.25rem 1.25rem;
 }
 
 /* ----- Quote Results Stats ----- */
 .result-stat {
-    border: 1px solid #dee2e6;
+    border: 1px solid var(--color-border);
     transition: box-shadow 0.2s ease;
 }
 
 .result-stat:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.1);
 }
 
 /* ----- FAQ Accordion ----- */
 .faq-accordion .accordion-button:not(.collapsed) {
-    background-color: #f0f7f2;
-    color: #2d5a3d;
+    background-color: var(--color-selected);
+    color: var(--color-accent);
     box-shadow: none;
+    font-weight: 600;
 }
 
 .faq-accordion .accordion-button:not(.collapsed)::after {
-    filter: invert(28%) sepia(30%) saturate(700%) hue-rotate(100deg);
+    filter: invert(32%) sepia(90%) saturate(1500%) hue-rotate(210deg) brightness(95%);
 }
 
 .faq-accordion .accordion-button:focus {
-    box-shadow: 0 0 0 0.2rem rgba(74, 124, 89, 0.25);
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
 }
 
 .faq-accordion .accordion-item {
@@ -247,19 +395,19 @@ body {
 }
 
 .faq-accordion .accordion-body a {
-    color: #2d5a3d;
+    color: var(--color-accent);
     text-decoration: underline;
 }
 
 .faq-accordion .accordion-body a:hover {
-    color: #4a7c59;
+    color: var(--color-accent-dark);
 }
 
 /* ----- Footer ----- */
 footer {
-    background-color: #212529;
-    color: #f8f9fa;
-    border-top: 3px solid #ffc107;
+    background-color: var(--color-text);
+    color: #f9fafb;
+    border-top: 3px solid var(--color-accent);
     padding: 2rem 0;
 }
 
@@ -269,7 +417,7 @@ footer h5 {
 }
 
 .footer-link {
-    color: #adb5bd;
+    color: #9ca3af;
     text-decoration: none;
     transition: color 0.2s ease;
     display: inline-block;
@@ -277,17 +425,31 @@ footer h5 {
 }
 
 .footer-link:hover {
-    color: #ffc107;
+    color: var(--color-accent);
+}
+
+/* Saved quotes section */
+#savedQuotesSection {
+    padding-top: 2rem;
+}
+
+/* Saved quotes card header accent */
+#savedQuotesContainer .card-header {
+    background: var(--color-selected) !important;
+    border-left: 4px solid var(--color-accent) !important;
+    color: var(--color-text) !important;
 }
 
 /* =========================================
    Media Query — screens narrower than 768px
    ========================================= */
-@media (max-width: 767.98px) {
+@media (max-width: 768px) {
 
     .hero-section {
         min-height: auto;
         padding: 60px 16px;
+        border-radius: 14px;
+        margin: 0.75rem 0.75rem 0;
     }
 
     .hero-section h1 {
@@ -340,8 +502,8 @@ footer h5 {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #dee2e6;
-    color: #6c757d;
+    background: var(--color-border);
+    color: var(--color-text-muted);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -351,93 +513,68 @@ footer h5 {
 }
 
 .form-step.active .step-bubble {
-    background: #2d5a3d;
+    background: var(--color-accent);
     color: #fff;
     transform: scale(1.15);
-    box-shadow: 0 0 0 4px rgba(45, 90, 61, 0.18);
+    box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.2);
 }
 
 .form-step.completed .step-bubble {
-    background: #4a7c59;
+    background: var(--color-accent-dark);
     color: #fff;
     transform: scale(1.0);
 }
 
 .step-text {
     font-size: 0.78rem;
-    color: #6c757d;
+    color: var(--color-text-muted);
     font-weight: 500;
     white-space: nowrap;
     transition: color 0.35s ease, font-weight 0.2s ease;
 }
 
 .form-step.active .step-text {
-    color: #2d5a3d;
+    color: var(--color-accent);
     font-weight: 700;
 }
 
 .form-step.completed .step-text {
-    color: #4a7c59;
+    color: var(--color-accent-dark);
     font-weight: 600;
 }
 
 .step-connector {
     flex: 1;
     height: 3px;
-    background: #dee2e6;
-    margin: 0 0.5rem;
-    margin-bottom: 1.5rem; /* vertically aligns with centre of bubble */
+    background: var(--color-border);
+    margin: 0 0.5rem 1.5rem;
     border-radius: 2px;
     transition: background 0.35s ease;
 }
 
 .step-connector.filled {
-    background: #4a7c59;
+    background: var(--color-accent);
 }
 
 /* ----- Print Styles ----- */
 .print-only {
-    display: none; /* hidden on screen, shown via @media print below */
+    display: none;
 }
 
 @media print {
-    /* Show print-only elements */
-    .print-only {
-        display: block !important;
-    }
+    .print-only { display: block !important; }
 
-    /* Hide everything that shouldn't appear on paper */
-    header,
-    footer,
-    .quote-banner,
-    #quoteFormCard,
-    #quoteForm,
-    .form-steps,
-    .text-muted.text-center.mb-4,
-    #savedQuotesSection,
-    #quoteActions {
+    header, footer, .quote-banner, #quoteFormCard, #quoteForm,
+    .form-steps, .text-muted.text-center.mb-4,
+    #savedQuotesSection, #quoteActions {
         display: none !important;
     }
 
-    /* Remove page background colours */
-    body,
-    .bg-light,
-    section {
-        background: #fff !important;
-    }
+    body, .bg-light, section { background: #fff !important; }
 
-    /* Clean up the results card */
-    #quoteResults {
-        box-shadow: none !important;
-        border: 1px solid #ccc !important;
-    }
+    #quoteResults { box-shadow: none !important; border: 1px solid #ccc !important; }
+    #quoteResults.d-none { display: block !important; }
 
-    /* Make sure results card is visible even if d-none was somehow left */
-    #quoteResults.d-none {
-        display: block !important;
-    }
-
-    /* Keep result stat boxes legible */
     .result-stat {
         border: 1px solid #dee2e6 !important;
         background: #f8f9fa !important;
@@ -445,72 +582,32 @@ footer h5 {
         print-color-adjust: exact;
     }
 
-    /* Keep table stripe colours when printing */
     .table-striped > tbody > tr:nth-of-type(odd) > * {
         background-color: #f2f2f2 !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
-    /* Keep the green success header on the card */
     .bg-success {
-        background-color: #2d5a3d !important;
+        background-color: var(--color-accent) !important;
         -webkit-print-color-adjust: exact;
         print-color-adjust: exact;
     }
 
-    /* Standard print sizing */
-    body {
-        font-size: 11pt;
-        color: #000;
-    }
+    body { font-size: 11pt; color: #000; }
 
-    /* Tighten up the print header */
-    #printHeader {
-        margin-bottom: 0.9rem !important;
-    }
+    #printHeader { margin-bottom: 0.9rem !important; }
+    #printHeader h3 { font-size: 17pt; margin-bottom: 0.2rem !important; }
+    #printHeader p { font-size: 10pt; margin-bottom: 0 !important; }
+    #printHeader hr { margin: 0.5rem 0 !important; }
 
-    #printHeader h3 {
-        font-size: 17pt;
-        margin-bottom: 0.2rem !important;
-    }
+    #quoteResults .card-body { padding: 1.25rem !important; }
+    #quoteResults .card-header { padding: 0.6rem 1.25rem !important; font-size: 13pt !important; }
 
-    #printHeader p {
-        font-size: 10pt;
-        margin-bottom: 0 !important;
-    }
-
-    #printHeader hr {
-        margin: 0.5rem 0 !important;
-    }
-
-    /* Results card */
-    #quoteResults .card-body {
-        padding: 1.25rem !important;
-    }
-
-    #quoteResults .card-header {
-        padding: 0.6rem 1.25rem !important;
-        font-size: 13pt !important;
-    }
-
-    /* Summary stat boxes */
-    .result-stat {
-        padding: 0.65rem 0.75rem !important;
-    }
-
-    .result-label {
-        font-size: 9pt !important;
-        margin-bottom: 0.1rem !important;
-    }
-
-    .result-value.fs-2 {
-        font-size: 18pt !important;
-    }
-
-    .result-value.fs-5 {
-        font-size: 13pt !important;
-    }
+    .result-stat { padding: 0.65rem 0.75rem !important; }
+    .result-label { font-size: 9pt !important; margin-bottom: 0.1rem !important; }
+    .result-value.fs-2 { font-size: 18pt !important; }
+    .result-value.fs-5 { font-size: 13pt !important; }
 
     #quoteResults .row.g-3 {
         --bs-gutter-y: 0.5rem !important;
@@ -518,27 +615,8 @@ footer h5 {
         margin-bottom: 1rem !important;
     }
 
-    /* Breakdown section heading */
-    #quoteResults h6 {
-        font-size: 11pt !important;
-        margin-bottom: 0.5rem !important;
-    }
-
-    .table-responsive {
-        margin-bottom: 0.75rem !important;
-    }
-
-    /* Breakdown table rows */
-    .table th,
-    .table td {
-        padding: 0.35rem 0.6rem !important;
-        font-size: 10pt !important;
-    }
-
-    /* Advisor note */
-    #quoteResults .text-muted.small {
-        font-size: 9.5pt !important;
-        margin-bottom: 0.5rem !important;
-    }
+    #quoteResults h6 { font-size: 11pt !important; margin-bottom: 0.5rem !important; }
+    .table-responsive { margin-bottom: 0.75rem !important; }
+    .table th, .table td { padding: 0.35rem 0.6rem !important; font-size: 10pt !important; }
+    #quoteResults .text-muted.small { font-size: 9.5pt !important; margin-bottom: 0.5rem !important; }
 }
-
