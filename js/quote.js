@@ -129,6 +129,32 @@ function calculateLifeQuote(age, gender, smoker, coverageAmount, exercise, hasPr
     );
 }
 
+/* =========================================
+   Form Progress Indicator
+   ========================================= */
+
+function setFormStep(stepNum) {
+    [1, 2, 3].forEach(function (i) {
+        const stepEl = document.getElementById('formStep' + i);
+        if (!stepEl) return;
+        const bubble = stepEl.querySelector('.step-bubble');
+        stepEl.classList.remove('active', 'completed');
+        if (i < stepNum) {
+            stepEl.classList.add('completed');
+            bubble.textContent = '✓';
+        } else {
+            bubble.textContent = i;
+            if (i === stepNum) stepEl.classList.add('active');
+        }
+    });
+
+    // Fill connectors between completed steps
+    [1, 2].forEach(function (i) {
+        const conn = document.getElementById('stepConnector' + i);
+        if (conn) conn.classList.toggle('filled', i < stepNum);
+    });
+}
+
 /* Name Fields — Strip digits on input */
 ['autoFullName', 'homeFullName', 'lifeFullName'].forEach(function (id) {
     const el = document.getElementById(id);
@@ -169,6 +195,8 @@ document.querySelectorAll('input[name="insuranceType"]').forEach(function (radio
         document.getElementById('commonFieldsBottom').classList.remove('d-none');
 
         document.querySelector('.type-card-invalid').classList.add('d-none');
+
+        setFormStep(2);
     });
 });
 
@@ -341,6 +369,9 @@ function validateLifeFields() {
 }
 
 /* Display Helpers */
+let _lastBreakdownRows = [];   // populated by addBreakdownRow, captured for saving
+let _currentQuoteData  = null; // set by showResults, read by saveCurrentQuote
+
 function formatCurrency(amount) {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
@@ -357,6 +388,7 @@ function multiplierImpact(factor, description) {
 }
 
 function addBreakdownRow(tbody, factor, userValue, impact) {
+    _lastBreakdownRows.push({ factor, userValue, impact });
     const row = document.createElement('tr');
     row.innerHTML =
         '<td>' + factor + '</td>' +
@@ -455,7 +487,7 @@ function buildLifeBreakdown(tbody, age, gender, smoker, coverageAmount, exercise
 
 /* Show Results Card */
 
-function showResults(name, email, type, monthlyPrice, buildBreakdownFn) {
+function showResults(name, email, type, coverage, monthlyPrice, buildBreakdownFn) {
     const annual = monthlyPrice * 12;
 
     // Populate summary stats
@@ -465,14 +497,38 @@ function showResults(name, email, type, monthlyPrice, buildBreakdownFn) {
     document.getElementById('resultAnnual').textContent  = formatCurrency(annual);
     document.getElementById('resultEmail').textContent   = email;
 
-    // Clear and rebuild breakdown table
+    // Clear and rebuild breakdown table, capturing rows for saving
     const tbody = document.getElementById('breakdownTableBody');
-    tbody.innerHTML = '';
+    tbody.innerHTML  = '';
+    _lastBreakdownRows = [];
     buildBreakdownFn(tbody);
+
+    // Store current quote data ready for saving
+    _currentQuoteData = {
+        id:        Date.now(),
+        savedAt:   new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+        type,
+        typeLabel: TYPE_LABELS[type],
+        name,
+        email,
+        monthly:   monthlyPrice,
+        annual,
+        coverage:  COVERAGE_LABELS[coverage] || coverage,
+        breakdown: [..._lastBreakdownRows]
+    };
+
+    // Reset the Save button to its active state
+    const saveBtn = document.getElementById('saveQuoteBtn');
+    saveBtn.textContent = '💾 Save Quote';
+    saveBtn.disabled    = false;
+    saveBtn.classList.remove('btn-secondary');
+    saveBtn.classList.add('btn-success');
 
     // Reveal the card
     const resultsCard  = document.getElementById('quoteResults');
     resultsCard.classList.remove('d-none');
+
+    setFormStep(3);
 
     // Smooth scroll to results — reuses smoothScrollTo() defined in main.js
     const navbar       = document.querySelector('.navbar');
@@ -509,7 +565,7 @@ document.getElementById('quoteForm').addEventListener('submit', function (e) {
         const coverage    = document.querySelector('input[name="autoCoverage"]:checked').value;
         const price       = calculateAutoQuote(age, vehicleYear, mileage, record, coverage);
 
-        showResults(name, email, type, price, function (tbody) {
+        showResults(name, email, type, coverage, price, function (tbody) {
             buildAutoBreakdown(tbody, age, vehicleYear, mileage, record, coverage);
         });
 
@@ -526,7 +582,7 @@ document.getElementById('quoteForm').addEventListener('submit', function (e) {
         const coverage      = document.querySelector('input[name="homeCoverage"]:checked').value;
         const price         = calculateHomeQuote(homeValue, yearBuilt, sqft, construction, hasSecurity, hasSprinklers, coverage);
 
-        showResults(name, email, type, price, function (tbody) {
+        showResults(name, email, type, coverage, price, function (tbody) {
             buildHomeBreakdown(tbody, homeValue, yearBuilt, sqft, construction, hasSecurity, hasSprinklers, coverage);
         });
 
@@ -543,11 +599,132 @@ document.getElementById('quoteForm').addEventListener('submit', function (e) {
         const coverage       = document.querySelector('input[name="lifeCoverage"]:checked').value;
         const price          = calculateLifeQuote(age, gender, smoker, coverageAmount, exercise, hasPreexisting, coverage);
 
-        showResults(name, email, type, price, function (tbody) {
+        showResults(name, email, type, coverage, price, function (tbody) {
             buildLifeBreakdown(tbody, age, gender, smoker, coverageAmount, exercise, hasPreexisting, coverage);
         });
     }
 });
+
+/* =========================================
+   localStorage — Save / Load / Delete
+   ========================================= */
+
+function saveCurrentQuote() {
+    if (!_currentQuoteData) return;
+
+    const quotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+
+    // Prevent saving the exact same quote twice
+    if (quotes.some(function (q) { return q.id === _currentQuoteData.id; })) return;
+
+    quotes.push(_currentQuoteData);
+    localStorage.setItem('savedQuotes', JSON.stringify(quotes));
+
+    // Update button to "saved" state
+    const saveBtn       = document.getElementById('saveQuoteBtn');
+    saveBtn.textContent = '✅ Quote Saved!';
+    saveBtn.disabled    = true;
+    saveBtn.classList.replace('btn-success', 'btn-secondary');
+
+    renderSavedQuotes();
+
+    // Scroll down to the saved quotes section
+    const section      = document.getElementById('savedQuotesSection');
+    const navbar       = document.querySelector('.navbar');
+    const navbarHeight = navbar ? navbar.offsetHeight : 0;
+    const targetTop    = section.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 16;
+    smoothScrollTo(targetTop);
+}
+
+function deleteSavedQuote(id) {
+    let quotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+    quotes = quotes.filter(function (q) { return q.id !== id; });
+    localStorage.setItem('savedQuotes', JSON.stringify(quotes));
+    renderSavedQuotes();
+}
+
+function clearAllSavedQuotes() {
+    if (!confirm('Are you sure you want to delete all saved quotes?')) return;
+    localStorage.removeItem('savedQuotes');
+    renderSavedQuotes();
+}
+
+function renderSavedQuotes() {
+    const container = document.getElementById('savedQuotesContainer');
+    if (!container) return;
+
+    const quotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+
+    if (quotes.length === 0) {
+        container.innerHTML = '';
+        return;
+    }
+
+    let html = `
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0">🗂️ Saved Quotes <span class="badge bg-secondary">${quotes.length}</span></h5>
+            <button class="btn btn-sm btn-outline-danger" onclick="clearAllSavedQuotes()">🗑️ Clear All</button>
+        </div>`;
+
+    // Newest first
+    [...quotes].reverse().forEach(function (q) {
+        const breakdownRows = (q.breakdown || []).map(function (row) {
+            return '<tr><td>' + row.factor + '</td><td>' + row.userValue + '</td><td>' + row.impact + '</td></tr>';
+        }).join('');
+
+        html += `
+        <div class="card border-0 shadow-sm mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center py-2 px-3"
+                 style="background:#f0f7f2; border-left:4px solid #2d5a3d;">
+                <span class="fw-semibold">${q.typeLabel} &mdash; ${q.name}</span>
+                <span class="text-muted small">${q.savedAt}</span>
+            </div>
+            <div class="card-body px-3 py-3">
+                <div class="row g-2 mb-3">
+                    <div class="col-6 col-sm-3">
+                        <div class="text-muted small">Monthly</div>
+                        <div class="fw-bold text-success fs-5">${formatCurrency(q.monthly)}</div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="text-muted small">Annual</div>
+                        <div class="fw-bold text-success">${formatCurrency(q.annual)}</div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="text-muted small">Coverage</div>
+                        <div class="fw-semibold">${q.coverage}</div>
+                    </div>
+                    <div class="col-6 col-sm-3">
+                        <div class="text-muted small">Email</div>
+                        <div class="small text-truncate">${q.email}</div>
+                    </div>
+                </div>
+                ${breakdownRows ? `
+                <details class="mb-3">
+                    <summary class="text-muted small" style="cursor:pointer; user-select:none;">
+                        📊 View Breakdown
+                    </summary>
+                    <div class="table-responsive mt-2">
+                        <table class="table table-sm table-striped mb-0">
+                            <thead class="table-dark">
+                                <tr><th>Factor</th><th>Your Info</th><th>Impact</th></tr>
+                            </thead>
+                            <tbody>${breakdownRows}</tbody>
+                        </table>
+                    </div>
+                </details>` : ''}
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-sm btn-outline-danger"
+                            onclick="deleteSavedQuote(${q.id})">🗑️ Delete</button>
+                </div>
+            </div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+/* Save Quote button */
+document.getElementById('saveQuoteBtn').addEventListener('click', saveCurrentQuote);
 
 /* Reset / Start Over */
 
@@ -574,9 +751,23 @@ document.getElementById('resetQuote').addEventListener('click', function () {
 
     document.getElementById('quoteResults').classList.add('d-none');
 
+    // Reset Save button
+    const saveBtn       = document.getElementById('saveQuoteBtn');
+    saveBtn.textContent = '💾 Save Quote';
+    saveBtn.disabled    = false;
+    saveBtn.classList.remove('btn-secondary');
+    saveBtn.classList.add('btn-success');
+    _currentQuoteData   = null;
+
+    setFormStep(1);
+
     const formCard     = document.getElementById('quoteForm').closest('.card');
     const navbar       = document.querySelector('.navbar');
     const navbarHeight = navbar ? navbar.offsetHeight : 0;
     const targetTop    = formCard.getBoundingClientRect().top + window.pageYOffset - navbarHeight - 16;
     smoothScrollTo(targetTop);
 });
+
+// Render any previously saved quotes when the page first loads
+renderSavedQuotes();
+

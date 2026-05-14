@@ -310,4 +310,87 @@ footer h5 {
     section h2 {
         font-size: 1.6rem;
     }
+
+    .step-bubble {
+        width: 32px;
+        height: 32px;
+        font-size: 0.85rem;
+    }
+
+    .step-text {
+        font-size: 0.7rem;
+    }
+}
+
+/* ----- Form Progress Indicator ----- */
+.form-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.step-bubble {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #dee2e6;
+    color: #6c757d;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 1rem;
+    transition: background 0.35s ease, color 0.35s ease, transform 0.2s ease;
+}
+
+.form-step.active .step-bubble {
+    background: #2d5a3d;
+    color: #fff;
+    transform: scale(1.15);
+    box-shadow: 0 0 0 4px rgba(45, 90, 61, 0.18);
+}
+
+.form-step.completed .step-bubble {
+    background: #4a7c59;
+    color: #fff;
+    transform: scale(1.0);
+}
+
+.step-text {
+    font-size: 0.78rem;
+    color: #6c757d;
+    font-weight: 500;
+    white-space: nowrap;
+    transition: color 0.35s ease, font-weight 0.2s ease;
+}
+
+.form-step.active .step-text {
+    color: #2d5a3d;
+    font-weight: 700;
+}
+
+.form-step.completed .step-text {
+    color: #4a7c59;
+    font-weight: 600;
+}
+
+.step-connector {
+    flex: 1;
+    height: 3px;
+    background: #dee2e6;
+    margin: 0 0.5rem;
+    margin-bottom: 1.5rem; /* vertically aligns with centre of bubble */
+    border-radius: 2px;
+    transition: background 0.35s ease;
+}
+
+.step-connector.filled {
+    background: #4a7c59;
 }
