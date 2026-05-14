@@ -172,6 +172,43 @@ body {
     margin-top: 2px;
 }
 
+/* ----- About Page — Values Grid ----- */
+.values-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.value-item {
+    flex: 1 1 200px;
+    max-width: 240px;
+    text-align: center;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 2rem 1.5rem;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.value-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 24px rgba(45, 90, 61, 0.14);
+}
+
+.value-icon {
+    font-size: 2.8rem;
+    line-height: 1;
+}
+
+/* ----- About Page — Team Photos ----- */
+.team-photo {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border: 3px solid #e0e0e0;
+}
+
 /* ----- Quote Page Banner ----- */
 .quote-banner {
     background: linear-gradient(135deg, #4a7c59 0%, #2d5a3d 100%);
@@ -186,6 +223,36 @@ body {
 
 .result-stat:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* ----- FAQ Accordion ----- */
+.faq-accordion .accordion-button:not(.collapsed) {
+    background-color: #f0f7f2;
+    color: #2d5a3d;
+    box-shadow: none;
+}
+
+.faq-accordion .accordion-button:not(.collapsed)::after {
+    filter: invert(28%) sepia(30%) saturate(700%) hue-rotate(100deg);
+}
+
+.faq-accordion .accordion-button:focus {
+    box-shadow: 0 0 0 0.2rem rgba(74, 124, 89, 0.25);
+}
+
+.faq-accordion .accordion-item {
+    border-left: none;
+    border-right: none;
+    transition: opacity 0.15s ease;
+}
+
+.faq-accordion .accordion-body a {
+    color: #2d5a3d;
+    text-decoration: underline;
+}
+
+.faq-accordion .accordion-body a:hover {
+    color: #4a7c59;
 }
 
 /* ----- Footer ----- */
