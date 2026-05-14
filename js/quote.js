@@ -129,9 +129,7 @@ function calculateLifeQuote(age, gender, smoker, coverageAmount, exercise, hasPr
     );
 }
 
-/* =========================================
-   Form Progress Indicator
-   ========================================= */
+/* Form Progress Indicator */
 
 function setFormStep(stepNum) {
     [1, 2, 3].forEach(function (i) {
@@ -605,9 +603,7 @@ document.getElementById('quoteForm').addEventListener('submit', function (e) {
     }
 });
 
-/* =========================================
-   localStorage — Save / Load / Delete
-   ========================================= */
+/* localStorage — Save / Load / Delete */
 
 function saveCurrentQuote() {
     if (!_currentQuoteData) return;
