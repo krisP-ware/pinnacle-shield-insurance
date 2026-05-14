@@ -643,6 +643,121 @@ function deleteSavedQuote(id) {
     renderSavedQuotes();
 }
 
+function printSavedQuote(id) {
+    const quotes = JSON.parse(localStorage.getItem('savedQuotes')) || [];
+    const q      = quotes.find(function (quote) { return quote.id === id; });
+    if (!q) return;
+
+    const breakdownRows = (q.breakdown || []).map(function (row) {
+        return '<tr><td>' + row.factor + '</td><td>' + row.userValue + '</td><td>' + row.impact + '</td></tr>';
+    }).join('');
+
+    const printDate = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+    const html = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quote — ${q.name}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
+          crossorigin="anonymous">
+    <style>
+        body { font-size: 11pt; padding: 1.5rem; color: #000; }
+        .print-header { text-align: center; margin-bottom: 0.9rem; }
+        .print-header h3 { font-size: 17pt; font-weight: 700; margin-bottom: 0.2rem; }
+        .print-header p { font-size: 10pt; color: #6c757d; margin: 0; }
+        .section-label { display: flex; justify-content: space-between; align-items: center; }
+        .card-top { background: #2d5a3d; color: #fff; padding: 0.6rem 1.25rem;
+                    border-radius: 0.375rem 0.375rem 0 0; font-size: 13pt; font-weight: 600; }
+        .card-body-inner { border: 1px solid #ccc; border-top: none;
+                           border-radius: 0 0 0.375rem 0.375rem; padding: 1.25rem; }
+        .result-stat { border: 1px solid #dee2e6; padding: 0.65rem 0.75rem;
+                       background: #f8f9fa; border-radius: 0.3rem; }
+        .result-label { font-size: 9pt; color: #6c757d; margin-bottom: 0.1rem; }
+        .result-value-large { font-size: 18pt; font-weight: 700; color: #198754; }
+        .result-value-normal { font-size: 13pt; font-weight: 700; }
+        .table th, .table td { padding: 0.35rem 0.6rem; font-size: 10pt; }
+        .advisor-note { font-size: 9.5pt; color: #6c757d; margin-top: 0.75rem; }
+        hr { margin: 0.5rem 0; }
+        .table-striped > tbody > tr:nth-of-type(odd) > * {
+            background-color: #f2f2f2;
+            -webkit-print-color-adjust: exact;
+            print-color-adjust: exact;
+        }
+        .table-dark { background-color: #212529 !important;
+                      -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .table-dark th { color: #fff !important; }
+    </style>
+</head>
+<body>
+    <div class="print-header">
+        <h3>🛡️ Pinnacle Shield Insurance</h3>
+        <p>123 Insurance Ave, Suite 100 &bull; Hartford, CT 06103</p>
+        <p>1-800-555-0199 &bull; contact@pinnacleshield.com</p>
+    </div>
+    <hr>
+    <div class="section-label mb-1">
+        <span style="font-weight:600;">Insurance Quote Summary</span>
+        <span style="font-size:9pt; color:#6c757d;">Printed: ${printDate}</span>
+    </div>
+    <hr style="margin-top:0.25rem;">
+
+    <div class="card-top mt-3">✅ Your Estimated Quote</div>
+    <div class="card-body-inner">
+        <div class="row g-2 mb-3">
+            <div class="col-6">
+                <div class="result-stat">
+                    <div class="result-label">Customer Name</div>
+                    <div class="result-value-normal">${q.name}</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="result-stat">
+                    <div class="result-label">Insurance Type</div>
+                    <div class="result-value-normal">${q.typeLabel}</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="result-stat">
+                    <div class="result-label">Monthly Premium</div>
+                    <div class="result-value-large">${formatCurrency(q.monthly)}</div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="result-stat">
+                    <div class="result-label">Annual Premium</div>
+                    <div class="result-value-large">${formatCurrency(q.annual)}</div>
+                </div>
+            </div>
+        </div>
+
+        <h6 style="font-size:11pt; font-weight:700; margin-bottom:0.5rem;">📊 Premium Breakdown</h6>
+        <table class="table table-striped table-sm">
+            <thead class="table-dark">
+                <tr><th>Factor</th><th>Your Info</th><th>Impact</th></tr>
+            </thead>
+            <tbody>${breakdownRows}</tbody>
+        </table>
+
+        <p class="advisor-note">
+            This is an indicative estimate based on the information provided.
+            A Pinnacle Shield advisor will contact <strong>${q.email}</strong>
+            within one business day to confirm your policy.
+        </p>
+    </div>
+
+    <script>
+        window.onload = function () { window.print(); };
+    <\/script>
+</body>
+</html>`;
+
+    const win = window.open('', '_blank', 'width=820,height=700');
+    win.document.write(html);
+    win.document.close();
+}
+
 function clearAllSavedQuotes() {
     if (!confirm('Are you sure you want to delete all saved quotes?')) return;
     localStorage.removeItem('savedQuotes');
@@ -712,7 +827,9 @@ function renderSavedQuotes() {
                         </table>
                     </div>
                 </details>` : ''}
-                <div class="d-flex justify-content-end">
+                <div class="d-flex justify-content-end gap-2">
+                    <button class="btn btn-sm btn-outline-secondary"
+                            onclick="printSavedQuote(${q.id})">🖨️ Print</button>
                     <button class="btn btn-sm btn-outline-danger"
                             onclick="deleteSavedQuote(${q.id})">🗑️ Delete</button>
                 </div>
@@ -725,6 +842,13 @@ function renderSavedQuotes() {
 
 /* Save Quote button */
 document.getElementById('saveQuoteBtn').addEventListener('click', saveCurrentQuote);
+
+/* Print Quote button */
+document.getElementById('printQuoteBtn').addEventListener('click', function () {
+    document.getElementById('printDate').textContent =
+        new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    window.print();
+});
 
 /* Reset / Start Over */
 
