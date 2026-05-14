@@ -17,7 +17,7 @@
     <header>
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand fw-bold" href="index.html">Pinnacle Shield Insurance</a>
+                <a class="navbar-brand fw-bold" href="index.html">🛡️ Pinnacle Shield Insurance</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#mainNav" aria-controls="mainNav"
                         aria-expanded="false" aria-label="Toggle navigation">
@@ -66,6 +66,24 @@
                             Fields marked <span class="text-danger">*</span> are required.
                             One of our advisors will follow up to finalize your policy.
                         </p>
+
+                        <!-- Form Progress Indicator -->
+                        <div class="form-steps mb-4" id="formSteps">
+                            <div class="form-step active" id="formStep1">
+                                <div class="step-bubble">1</div>
+                                <div class="step-text">Select Type</div>
+                            </div>
+                            <div class="step-connector" id="stepConnector1"></div>
+                            <div class="form-step" id="formStep2">
+                                <div class="step-bubble">2</div>
+                                <div class="step-text">Enter Details</div>
+                            </div>
+                            <div class="step-connector" id="stepConnector2"></div>
+                            <div class="form-step" id="formStep3">
+                                <div class="step-bubble">3</div>
+                                <div class="step-text">Review &amp; Calculate</div>
+                            </div>
+                        </div>
 
                         <!-- Quote Form Card -->
                         <div class="card shadow-sm border-0 mb-4">
@@ -647,6 +665,7 @@
                                 <!-- Actions -->
                                 <div class="d-flex gap-2 flex-wrap">
                                     <a href="index.html" class="btn btn-outline-secondary">← Back to Home</a>
+                                    <button id="saveQuoteBtn" class="btn btn-success fw-semibold">💾 Save Quote</button>
                                     <button id="resetQuote" class="btn btn-warning fw-semibold">🔄 Get Another Quote</button>
                                 </div>
 
@@ -657,6 +676,17 @@
                     </div>
                 </div>
 
+            </div>
+        </section>
+
+        <!-- Saved Quotes Section -->
+        <section class="py-4 bg-white" id="savedQuotesSection">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div id="savedQuotesContainer"></div>
+                    </div>
+                </div>
             </div>
         </section>
 
