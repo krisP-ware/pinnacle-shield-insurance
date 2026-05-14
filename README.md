@@ -1,6 +1,7 @@
 # 🛡️ Pinnacle Shield Insurance
 **Capstone Project #1** — A multipage static insurance company website built with HTML, CSS, and JavaScript using Bootstrap 5.
-
+**Created by:** Kris Penn
+**Live Link:** [https://krisp-ware.github.io/pinnacle-shield-insurance/](https://krisp-ware.github.io/pinnacle-shield-insurance/)
 ---
 
 ## 📁 Project Structure
