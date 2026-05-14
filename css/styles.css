@@ -394,3 +394,151 @@ footer h5 {
 .step-connector.filled {
     background: #4a7c59;
 }
+
+/* ----- Print Styles ----- */
+.print-only {
+    display: none; /* hidden on screen, shown via @media print below */
+}
+
+@media print {
+    /* Show print-only elements */
+    .print-only {
+        display: block !important;
+    }
+
+    /* Hide everything that shouldn't appear on paper */
+    header,
+    footer,
+    .quote-banner,
+    #quoteFormCard,
+    #quoteForm,
+    .form-steps,
+    .text-muted.text-center.mb-4,
+    #savedQuotesSection,
+    #quoteActions {
+        display: none !important;
+    }
+
+    /* Remove page background colours */
+    body,
+    .bg-light,
+    section {
+        background: #fff !important;
+    }
+
+    /* Clean up the results card */
+    #quoteResults {
+        box-shadow: none !important;
+        border: 1px solid #ccc !important;
+    }
+
+    /* Make sure results card is visible even if d-none was somehow left */
+    #quoteResults.d-none {
+        display: block !important;
+    }
+
+    /* Keep result stat boxes legible */
+    .result-stat {
+        border: 1px solid #dee2e6 !important;
+        background: #f8f9fa !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Keep table stripe colours when printing */
+    .table-striped > tbody > tr:nth-of-type(odd) > * {
+        background-color: #f2f2f2 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Keep the green success header on the card */
+    .bg-success {
+        background-color: #2d5a3d !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+
+    /* Standard print sizing */
+    body {
+        font-size: 11pt;
+        color: #000;
+    }
+
+    /* Tighten up the print header */
+    #printHeader {
+        margin-bottom: 0.9rem !important;
+    }
+
+    #printHeader h3 {
+        font-size: 17pt;
+        margin-bottom: 0.2rem !important;
+    }
+
+    #printHeader p {
+        font-size: 10pt;
+        margin-bottom: 0 !important;
+    }
+
+    #printHeader hr {
+        margin: 0.5rem 0 !important;
+    }
+
+    /* Results card */
+    #quoteResults .card-body {
+        padding: 1.25rem !important;
+    }
+
+    #quoteResults .card-header {
+        padding: 0.6rem 1.25rem !important;
+        font-size: 13pt !important;
+    }
+
+    /* Summary stat boxes */
+    .result-stat {
+        padding: 0.65rem 0.75rem !important;
+    }
+
+    .result-label {
+        font-size: 9pt !important;
+        margin-bottom: 0.1rem !important;
+    }
+
+    .result-value.fs-2 {
+        font-size: 18pt !important;
+    }
+
+    .result-value.fs-5 {
+        font-size: 13pt !important;
+    }
+
+    #quoteResults .row.g-3 {
+        --bs-gutter-y: 0.5rem !important;
+        --bs-gutter-x: 0.5rem !important;
+        margin-bottom: 1rem !important;
+    }
+
+    /* Breakdown section heading */
+    #quoteResults h6 {
+        font-size: 11pt !important;
+        margin-bottom: 0.5rem !important;
+    }
+
+    .table-responsive {
+        margin-bottom: 0.75rem !important;
+    }
+
+    /* Breakdown table rows */
+    .table th,
+    .table td {
+        padding: 0.35rem 0.6rem !important;
+        font-size: 10pt !important;
+    }
+
+    /* Advisor note */
+    #quoteResults .text-muted.small {
+        font-size: 9.5pt !important;
+        margin-bottom: 0.5rem !important;
+    }
+}
+
