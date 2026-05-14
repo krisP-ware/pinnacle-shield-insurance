@@ -1,5 +1,5 @@
-# Pinnacle Shield Insurance
-**Capstone Project #1** — A multi-page static insurance company website built with HTML, CSS, and JavaScript using Bootstrap 5.
+# 🛡️ Pinnacle Shield Insurance
+**Capstone Project #1** — A multipage static insurance company website built with HTML, CSS, and JavaScript using Bootstrap 5.
 
 ---
 
@@ -7,15 +7,17 @@
 
 ```
 pinnacle-shield-insurance/
-├── index.html        # Homepage (fully built)
-├── about.html        # About Us page (placeholder)
-├── quote.html        # Get a Quote page (fully built)
-├── faq.html          # FAQ page (placeholder)
+├── index.html        # Homepage
+├── about.html        # About Us page
+├── quote.html        # Get a Quote page
+├── faq.html          # FAQ page
+├── assets/
+│   └── fox.jpg       # Team photo used on the About page
 ├── css/
-│   └── styles.css    # Custom stylesheet
+│   └── styles.css    # Custom stylesheet (Clean Corporate Blue theme)
 ├── js/
-│   ├── main.js       # Site-wide JavaScript (smooth scroll, active nav)
-│   └── quote.js      # Quote page logic (form, validation, calculation, results)
+│   ├── main.js       # Site-wide JS (smooth scroll, active nav)
+│   └── quote.js      # Quote page logic (form, validation, calculation, results, localStorage)
 └── README.md
 ```
 
@@ -23,208 +25,248 @@ pinnacle-shield-insurance/
 
 ## 📄 Pages
 
-| File | Status | Description |
-|---|---|---|
-| `index.html` | ✅ Complete | Full homepage with nav, hero, cards, insurance plans, and footer |
-| `quote.html` | ✅ Complete | Full quote form with dynamic fields, validation, calculation, and results |
-| `about.html` | 🔲 Placeholder | About Us page — to be built |
-| `faq.html` | 🔲 Placeholder | Frequently Asked Questions — to be built |
+| File         | Status     | Description                                                            |
+|--------------|------------|------------------------------------------------------------------------|
+| `index.html` | ✅ Complete | Homepage — nav, hero, Why Choose Us, insurance plans, footer           |
+| `quote.html` | ✅ Complete | Dynamic quote form with validation, calculation, results, save & print |
+| `about.html` | ✅ Complete | Company overview, team cards, core values grid                         |
+| `faq.html`   | ✅ Complete | Bootstrap accordion FAQ with live search/filter                        |
 
 ---
 
 ## 🏠 Homepage (`index.html`)
 
-The homepage is fully implemented and contains the following sections:
-
 ### Navigation Bar
-- Built with Bootstrap 5 (`navbar-expand-lg navbar-dark bg-dark`)
-- Displays the company brand name: **Pinnacle Shield Insurance**
-- Links to all four pages: Home, Get a Quote, About Us, FAQ
-- Collapses into a hamburger menu on small screens
-- Active page is highlighted automatically via JavaScript
+- Bootstrap 5 `navbar-light bg-white` with border-bottom shadow
+- Brand: **🛡️ Pinnacle Shield Insurance**
+- Links to all four pages; collapses to a hamburger menu on mobile
+- Active page highlighted automatically via JavaScript
 
 ### Hero Section
-- Earthy green gradient background (`#4a7c59` → `#2d5a3d`)
+- Deep navy → brand blue → sky blue gradient (`#1e3a8a → #2563EB → #60a5fa`)
+- Rounded corners (`border-radius: 20px`) and inset from viewport edges (`margin: 1.25rem`)
 - Large white headline and subheading
-- **"Get Your Free Quote"** call-to-action button (`btn-warning btn-lg`) that smoothly scrolls down to the insurance plans section
+- **"Get Your Free Quote"** CTA button smooth-scrolls to the `#insurance-plans` section
 
 ### Why Choose Us
-- Three Bootstrap cards in a responsive `row`/`col-md-4` grid
-- Highlights: ⚡ Fast Quotes, 🛡️ Trusted Coverage, 🕐 24/7 Support
-- Cards lift on hover with a smooth `transform` + `box-shadow` transition
+- Three Bootstrap cards with `1.25rem` horizontal margins and `border-radius: 12px`
+- Cards: ⚡ Fast Quotes, 🛡️ Trusted Coverage, 🕐 24/7 Support
+- Cards lift on hover with `translateY(-6px)` + `box-shadow` transition
 
 ### Our Insurance Plans
-- Three-column Bootstrap grid with custom styled cards
-- Covers: 🚗 Auto Insurance, 🏠 Home Insurance, ❤️ Life Insurance
-- Each card has a brief description and a "Get Quote" button
+- Three-column Bootstrap grid linking to `quote.html`
+- Plans: 🚗 Auto Insurance, 🏠 Home Insurance, ❤️ Life Insurance
 
 ### Footer
-- Dark background with amber top-border accent (consistent with the navbar)
-- Company name and © 2026 copyright
-- Quick navigation links
-- Placeholder contact info (email, phone, address)
+- Dark background with quick nav links and company contact info
 
 ---
 
 ## 📋 Quote Page (`quote.html`)
 
-The quote page is fully implemented and contains:
+### Form Progress Indicator
+- Three-step visual stepper: **Select Type → Fill Details → View Quote**
+- Step bubbles update state (default / active / completed `✓`) via `setFormStep(n)`
+- Connector lines fill in as steps are completed
 
 ### Insurance Type Card Picker
-- Three clickable radio cards at the top of the form: 🚗 Auto, 🏠 Home, ❤️ Life
-- Uses Bootstrap's `btn-check` pattern — hidden radio inputs with styled `<label>` cards
-- Selecting a type reveals the relevant field section and hides the others
+- Three clickable radio cards: 🚗 Auto, 🏠 Home, ❤️ Life
+- Uses Bootstrap `btn-check` pattern — hidden radio inputs with styled card labels
+- Selecting a card reveals the relevant field section and hides the others
 
-### Dynamic Form Fields (per type)
+### Dynamic Form Fields
+
+Shared fields (appear once a type is selected):
+- **Email Address** — validated with `/^[^\s@]+@[^\s@]+\.[^\s@]+$/`
+- **Additional Notes** — optional textarea
+- **Get My Quote** submit button
 
 **Auto Insurance (9 fields)**
-| Field | Type | Validation |
-|---|---|---|
-| Full Name | Text | Required, min 2 characters |
-| Age | Number | Required, 16–100 |
-| ZIP Code | Text | Required, exactly 5 digits |
-| Vehicle Year | Number | Required, 1990–2026 |
-| Vehicle Make | Select | Toyota / Honda / Ford / BMW / Tesla / Other |
-| Vehicle Model | Text | Required |
-| Annual Mileage | Select | 5 bands: Under 5k → Over 20k |
-| Driving Record | Select | Clean / 1 Ticket / 2+ Tickets / Accident |
-| Coverage Level | Radio cards | Basic / Standard / Premium |
+
+| Field          | Validation                                            |
+|----------------|-------------------------------------------------------|
+| Full Name      | Required, min 2 chars, digits blocked on input        |
+| Age            | Required, 16–100                                      |
+| ZIP Code       | Required, exactly 5 digits                            |
+| Vehicle Year   | Required, 1990–2026                                   |
+| Vehicle Make   | Required (select)                                     |
+| Vehicle Model  | Required (text)                                       |
+| Annual Mileage | Required (select)                                     |
+| Driving Record | Required (select)                                     |
+| Coverage Level | Required (radio cards) — Basic / Standard / Premium   |
 
 **Home Insurance (10 fields)**
-| Field | Type | Validation |
-|---|---|---|
-| Full Name | Text | Required, min 2 characters |
-| Age | Number | Required, 18–100 |
-| ZIP Code | Text | Required, exactly 5 digits |
-| Home Value | Number | Required, min $50,000 |
-| Year Built | Number | Required, 1900–2026 |
-| Square Footage | Number | Required, 500–10,000 |
-| Construction Type | Select | Wood Frame / Brick / Concrete / Steel |
-| Has Security System | Checkbox | Discount if checked |
-| Has Fire Sprinklers | Checkbox | Discount if checked |
-| Coverage Level | Radio cards | Basic / Standard / Premium |
+
+| Field             | Validation                                          |
+|-------------------|-----------------------------------------------------|
+| Full Name         | Required, min 2 chars, digits blocked on input      |
+| Age               | Required, 18–100                                    |
+| ZIP Code          | Required, exactly 5 digits                          |
+| Home Value        | Required, min $50,000                               |
+| Year Built        | Required, 1900–2026                                 |
+| Square Footage    | Required, 500–10,000                                |
+| Construction Type | Required (select)                                   |
+| Security System   | Checkbox — 5% discount if checked                   |
+| Fire Sprinklers   | Checkbox — 8% discount if checked                   |
+| Coverage Level    | Required (radio cards) — Basic / Standard / Premium |
 
 **Life Insurance (9 fields)**
-| Field | Type | Validation |
-|---|---|---|
-| Full Name | Text | Required, min 2 characters |
-| Age | Number | Required, 18–85 |
-| ZIP Code | Text | Required, exactly 5 digits |
-| Gender | Select | Male / Female / Non-binary |
-| Coverage Amount | Select | $100k / $250k / $500k / $1M |
-| Exercise Frequency | Select | Rarely / 1–2 / 3–4 / 5+/week |
-| Smoker | Radio buttons | Yes / No |
-| Pre-existing Conditions | Checkbox | Increases premium if checked |
-| Coverage Level | Radio cards | Basic / Standard / Premium |
 
-### Results Card (shown after valid submission)
-- **Summary stats** — Customer name, insurance type, monthly premium (formatted as currency), annual premium (monthly × 12)
-- **Premium breakdown table** — one row per calculation factor, showing the user's input value and its multiplier impact (e.g. `+50% surcharge (×1.5) — young/senior driver`)
-- **"Get Another Quote"** button — resets the form, clears validation state, hides results, and smooth-scrolls back to the top of the form
+| Field                   | Validation                                          |
+|-------------------------|-----------------------------------------------------|
+| Full Name               | Required, min 2 chars, digits blocked on input      |
+| Age                     | Required, 18–85                                     |
+| ZIP Code                | Required, exactly 5 digits                          |
+| Gender                  | Required (select)                                   |
+| Coverage Amount         | Required (select) — $100k / $250k / $500k / $1M     |
+| Exercise Frequency      | Required (select)                                   |
+| Smoker                  | Required (radio buttons)                            |
+| Pre-existing Conditions | Checkbox — 50% surcharge if checked                 |
+| Coverage Level          | Required (radio cards) — Basic / Standard / Premium |
+
+### Results Card
+- **Summary stats** — Name, insurance type, monthly premium, annual premium, email
+- **Premium breakdown table** — one row per factor with the user's value and multiplier impact
+- **Action buttons**: 🖨️ Print Quote, 💾 Save Quote, 🔄 Get Another Quote
+
+### Save & Print
+- **Print Quote** — `window.print()` with `@media print` CSS that hides form and UI chrome; shows company letterhead
+- **Save Quote** — stores the full quote (including breakdown rows) in `localStorage` under `savedQuotes`
+- **Saved Quotes section** — rendered on page load and after every save; newest first, with collapsible breakdown, 🖨️ Print and 🗑️ Delete per entry, and a 🗑️ Clear All button
+- **Print Saved Quote** — builds a standalone HTML page as a `Blob` URL, opens it in a popup, and auto-triggers `window.print()`; revokes the object URL after load to avoid memory leaks
 
 ---
 
 ## 🧮 Quote Calculation Logic (`js/quote.js`)
 
-All three types use a **base rate × multiplier chain** derived from actuarial-style factor tables.
-
 ### Auto Insurance
 ```
-Monthly = $75 × Age factor × Vehicle age factor × Mileage factor × Driving record × Coverage level
+Monthly = $75 × Age factor × Vehicle age factor × Mileage factor × Driving record × Coverage
 ```
-
-| Factor | Values |
-|---|---|
-| Age | Under 25: ×1.5 / 25–65: ×1.0 / Over 65: ×1.3 |
-| Vehicle Age | Under 3 yrs: ×1.3 / 3–10 yrs: ×1.0 / Over 10 yrs: ×0.8 |
-| Mileage | Under 5k: ×0.8 / 5–10k: ×1.0 / 10–15k: ×1.1 / 15–20k: ×1.3 / Over 20k: ×1.5 |
-| Driving Record | Clean: ×1.0 / 1 ticket: ×1.2 / 2+ tickets: ×1.5 / Accident: ×1.8 |
-| Coverage | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4 |
+| Factor         | Values                                                                      |
+|----------------|-----------------------------------------------------------------------------|
+| Age            | Under 25: ×1.5 / 25–65: ×1.0 / Over 65: ×1.3                                |
+| Vehicle Age    | Under 3 yrs: ×1.3 / 3–10 yrs: ×1.0 / Over 10 yrs: ×0.8                      |
+| Mileage        | Under 5k: ×0.8 / 5–10k: ×1.0 / 10–15k: ×1.1 / 15–20k: ×1.3 / Over 20k: ×1.5 |
+| Driving Record | Clean: ×1.0 / 1 ticket: ×1.2 / 2+ tickets: ×1.5 / Accident: ×1.8            |
+| Coverage       | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4                                |
 
 ### Home Insurance
 ```
-Monthly = (Home value × 0.003 / 12) × Year built × Construction × Coverage
+Monthly = (Home value × 0.003 ÷ 12) × Year built × Construction × Coverage
         + (Square footage × $0.01)
         × Security discount × Sprinkler discount
 ```
-
-| Factor | Values |
-|---|---|
-| Year Built | Before 1970: ×1.4 / 1970–1999: ×1.1 / 2000+: ×1.0 |
-| Construction | Wood: ×1.2 / Brick: ×1.0 / Concrete: ×0.9 / Steel: ×0.85 |
-| Size | +$0.01/sq ft/month (additive) |
-| Security System | ×0.95 (−5% discount) |
-| Fire Sprinklers | ×0.92 (−8% discount) |
-| Coverage | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4 |
+| Factor          | Values                                                   |
+|-----------------|----------------------------------------------------------|
+| Year Built      | Before 1970: ×1.4 / 1970–1999: ×1.1 / 2000+: ×1.0        |
+| Construction    | Wood: ×1.2 / Brick: ×1.0 / Concrete: ×0.9 / Steel: ×0.85 |
+| Size surcharge  | +$0.01/sq ft/month (additive)                            |
+| Security System | ×0.95 (−5% discount)                                     |
+| Fire Sprinklers | ×0.92 (−8% discount)                                     |
+| Coverage        | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4             |
 
 ### Life Insurance
 ```
-Monthly = (Coverage amount × 0.0005 / 12) × Age × Smoker × Exercise × Pre-existing × Gender × Coverage level
+Monthly = (Coverage amount × 0.0005 ÷ 12) × Age × Smoker × Exercise × Pre-existing × Gender × Coverage
 ```
-
-| Factor | Values |
-|---|---|
-| Age | 18–30: ×1.0 / 31–45: ×1.5 / 46–60: ×2.5 / 61–85: ×4.0 |
-| Smoker | No: ×1.0 / Yes: ×2.0 |
-| Exercise | Rarely: ×1.3 / 1–2/wk: ×1.1 / 3–4/wk: ×1.0 / 5+/wk: ×0.9 |
-| Pre-existing | No: ×1.0 / Yes: ×1.5 |
-| Gender | Male: ×1.1 / Female: ×1.0 / Non-binary: ×1.05 |
-| Coverage | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4 |
+| Factor       | Values                                                   |
+|--------------|----------------------------------------------------------|
+| Age          | 18–30: ×1.0 / 31–45: ×1.5 / 46–60: ×2.5 / 61–85: ×4.0    |
+| Smoker       | No: ×1.0 / Yes: ×2.0                                     |
+| Exercise     | Rarely: ×1.3 / 1–2/wk: ×1.1 / 3–4/wk: ×1.0 / 5+/wk: ×0.9 |
+| Pre-existing | No: ×1.0 / Yes: ×1.5                                     |
+| Gender       | Male: ×1.1 / Female: ×1.0 / Non-binary: ×1.05            |
+| Coverage     | Basic: ×0.8 / Standard: ×1.0 / Premium: ×1.4             |
 
 ---
 
 ## ✅ Form Validation (`js/quote.js`)
 
-Validation is handled entirely in JavaScript — the form uses `novalidate` and no HTML5 `required` attributes on type-specific fields.
+- Form uses `novalidate` — all validation handled in JavaScript
+- All errors shown simultaneously on submit
+- Invalid fields: `is-invalid` class (red border + inline message)
+- Valid fields: `is-valid` class (green border)
+- ZIP codes: `/^\d{5}$/` regex
+- Numerics: `parseInt`/`parseFloat` + `isNaN` guard + range check
+- Radio groups: dedicated `.type-card-invalid` / `.auto-coverage-invalid` etc. elements
+- Name fields: digits silently stripped on `input` event via `replace(/[0-9]/g, '')`
+- Full validation state cleared on "Get Another Quote" reset
 
-- All fields are validated on every submit attempt (all errors shown at once, not one at a time)
-- Invalid fields receive Bootstrap's `is-invalid` class (red border + inline error message)
-- Valid fields receive `is-valid` class (green border confirms input)
-- ZIP codes validated with `/^\d{5}$/` regex
-- Numeric fields checked with `parseInt`/`parseFloat` + `isNaN` guard + explicit range checks
-- Radio groups (coverage level, smoker) validated manually with a dedicated error message element
-- Validation state is fully cleared when "Get Another Quote" is clicked
+---
+
+## 🧑‍💼 About Page (`about.html`)
+
+- Page banner matching the hero gradient (rounded, inset, `100px` vertical padding)
+- **Company Overview** — founding story and mission statement
+- **Meet the Team** — four circular team photo cards (`assets/fox.jpg`), name, title, and bio
+- **Our Core Values** — six-card grid: Integrity, Customer First, Innovation, Community, Transparency, Excellence
+
+---
+
+## ❓ FAQ Page (`faq.html`)
+
+- Page banner consistent with other interior pages
+- **Live search bar** — filters accordion items in real time; shows a "no results" message when nothing matches
+- **Bootstrap Accordion** — 8 questions covering coverage, quotes, claims, bundling, and cancellation
 
 ---
 
 ## 🎨 Stylesheet (`css/styles.css`)
 
-- **CSS Reset** — `box-sizing: border-box`, zeroed margins/padding on all elements
-- `html { scroll-behavior: smooth }` — native smooth scroll fallback
-- Hero section styling — gradient background, centred text, responsive padding
-- Card hover effects — `translateY` lift + `box-shadow` using CSS `transition`
-- **Type card picker** — styled radio `<label>` cards with green selected state
-- **Coverage level radio buttons** — compact pill-style cards matching the brand palette
-- Footer styling — matches the navbar's dark/amber visual language
-- **Media query** (`max-width: 767.98px`) — adjusts hero font sizes, card spacing, and footer layout on small screens
+### Color Palette — Clean Corporate Blue
+| Variable              | Value     | Usage                         |
+|-----------------------|-----------|-------------------------------|
+| `--color-primary`     | `#2563EB` | Brand blue                    |
+| `--color-accent`      | `#2563EB` | CTAs, highlights              |
+| `--color-accent-dark` | `#1D4ED8` | Hover/active states           |
+| `--color-bg`          | `#FFFFFF` | Page background               |
+| `--color-bg-alt`      | `#F3F4F6` | Alternate section backgrounds |
+| `--color-selected`    | `#EFF6FF` | Checked/open state tint       |
+| `--color-border`      | `#E5E7EB` | Borders and dividers          |
+| `--color-text`        | `#111827` | Body text                     |
+| `--color-text-muted`  | `#6B7280` | Secondary/muted text          |
+
+### Key Sections
+- **CSS Reset** — `box-sizing: border-box`, zeroed margins/padding globally
+- **Navbar** — white background, `border-bottom`, `box-shadow`
+- **Hero / page banners** — `linear-gradient(135deg, #1e3a8a 0%, #2563EB 55%, #60a5fa 100%)`, `border-radius: 20px`, `margin: 1.25rem`
+- **Why Choose Us** — `margin: 0 1.25rem`, `border-radius: 12px`
+- **Card hover** — `translateY(-6px)` lift + brand-blue `box-shadow`
+- **Form step indicator** — bubble + connector CSS with active/completed states
+- **Saved Quotes** — `padding-top: 1.5rem`; card headers with blue left-border accent
+- **`@media print`** — hides navbar, footer, banner, form card, progress steps, actions section, and saved quotes; reveals company letterhead header
+- **Responsive** (`max-width: 767.98px`) — adjusts hero text size, card spacing, footer layout
 
 ---
 
 ## ⚙️ JavaScript (`js/main.js`)
 
 ### Smooth Scroll
-- Listens for clicks on any anchor link (`a[href^="#"]`)
-- Animates scrolling using a custom **`requestAnimationFrame`** loop with an **easeInOutQuad** easing function (slow → fast → slow)
-- Scroll duration controlled by `SCROLL_DURATION` (default: `900ms`)
-- Offsets scroll position by the navbar height so headings aren't hidden behind the nav
-- `smoothScrollTo(targetY)` is a **globally available function** — reused by `quote.js` for results reveal and form reset scrolling
+- Intercepts `a[href^="#"]` anchor clicks site-wide
+- Custom `requestAnimationFrame` loop with **easeInOutQuad** easing
+- Duration: `SCROLL_DURATION = 900ms`
+- Offsets by navbar height to prevent content being hidden behind the nav
+- `smoothScrollTo(targetY)` is a **global function** reused by `quote.js` for post-submit, post-save, and reset scrolling
 
 ### Active Nav Highlighting
-- On page load, reads `window.location.pathname` to determine the current page filename
-- Adds Bootstrap's `active` class + `aria-current="page"` to the matching nav link
-- Removes stale active states from all non-matching links — works automatically across all pages
+- Reads `window.location.pathname` on page load to identify the current page
+- Applies `active` + `aria-current="page"` to the matching nav link
+- Removes stale states from all other links — works across all four pages automatically
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Technology | Purpose |
-|---|---|
-| HTML5 | Page structure and semantic markup |
-| CSS3 | Custom styles, transitions, media queries |
-| JavaScript ES6 (`const`/`let`) | Form logic, validation, calculation, smooth scroll |
-| [Bootstrap 5.3.2](https://getbootstrap.com/) | Responsive grid, navbar, cards, utility classes |
-| `Intl.NumberFormat` | Currency formatting in the results card |
+| Technology                                   | Purpose                                                                                   |
+|----------------------------------------------|-------------------------------------------------------------------------------------------|
+| HTML5                                        | Semantic page structure                                                                   |
+| CSS3                                         | Custom styles, CSS variables, transitions, media queries, print styles                    |
+| JavaScript ES6 (`const`/`let`)               | Form logic, validation, calculation, scroll, localStorage                                 |
+| [Bootstrap 5.3.2](https://getbootstrap.com/) | Responsive grid, navbar, cards, accordion, utility classes                                |
+| `Intl.NumberFormat`                          | Currency formatting throughout                                                            |
+| `localStorage`                               | Persisting saved quotes between sessions                                                  |
+| `Blob` / `URL.createObjectURL`               | Generating standalone print pages for saved quotes (replaces deprecated `document.write`) |
 
 Bootstrap is loaded via CDN — no build tools or package manager required.
 
