@@ -143,7 +143,7 @@ function setFormStep(stepNum) {
             stepEl.classList.add('completed');
             bubble.textContent = '✓';
         } else {
-            bubble.textContent = i;
+            bubble.textContent = String(i);
             if (i === stepNum) stepEl.classList.add('active');
         }
     });
@@ -668,14 +668,14 @@ function printSavedQuote(id) {
         .print-header h3 { font-size: 17pt; font-weight: 700; margin-bottom: 0.2rem; }
         .print-header p { font-size: 10pt; color: #6c757d; margin: 0; }
         .section-label { display: flex; justify-content: space-between; align-items: center; }
-        .card-top { background: #2d5a3d; color: #fff; padding: 0.6rem 1.25rem;
+        .card-top { background: #2563EB; color: #fff; padding: 0.6rem 1.25rem;
                     border-radius: 0.375rem 0.375rem 0 0; font-size: 13pt; font-weight: 600; }
         .card-body-inner { border: 1px solid #ccc; border-top: none;
                            border-radius: 0 0 0.375rem 0.375rem; padding: 1.25rem; }
         .result-stat { border: 1px solid #dee2e6; padding: 0.65rem 0.75rem;
                        background: #f8f9fa; border-radius: 0.3rem; }
         .result-label { font-size: 9pt; color: #6c757d; margin-bottom: 0.1rem; }
-        .result-value-large { font-size: 18pt; font-weight: 700; color: #198754; }
+        .result-value-large { font-size: 18pt; font-weight: 700; color: #2563EB; }
         .result-value-normal { font-size: 13pt; font-weight: 700; }
         .table th, .table td { padding: 0.35rem 0.6rem; font-size: 10pt; }
         .advisor-note { font-size: 9.5pt; color: #6c757d; margin-top: 0.75rem; }
@@ -753,9 +753,14 @@ function printSavedQuote(id) {
 </body>
 </html>`;
 
-    const win = window.open('', '_blank', 'width=820,height=700');
-    win.document.write(html);
-    win.document.close();
+    const blob = new Blob([html], { type: 'text/html' });
+    const url  = URL.createObjectURL(blob);
+    const win  = window.open(url, '_blank', 'width=820,height=700');
+    if (win) {
+        win.addEventListener('load', function () {
+            URL.revokeObjectURL(url);
+        });
+    }
 }
 
 function clearAllSavedQuotes() {
@@ -790,7 +795,7 @@ function renderSavedQuotes() {
         html += `
         <div class="card border-0 shadow-sm mb-3">
             <div class="card-header d-flex justify-content-between align-items-center py-2 px-3"
-                 style="background:#f0f7f2; border-left:4px solid #2d5a3d;">
+                 style="background:#eff6ff; border-left:4px solid #2563EB;">
                 <span class="fw-semibold">${q.typeLabel} &mdash; ${q.name}</span>
                 <span class="text-muted small">${q.savedAt}</span>
             </div>
