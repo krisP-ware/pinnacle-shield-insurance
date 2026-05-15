@@ -30,6 +30,14 @@ body {
     color: var(--color-text);
     line-height: 1.6;
     background-color: var(--color-bg);
+    /* Sticky footer — body fills full viewport height */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
 }
 
 /* ----- Bootstrap Utility Overrides ----- */
